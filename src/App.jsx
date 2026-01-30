@@ -1,16 +1,11 @@
-import { useState } from 'react'
-
-import './App.css'
-
-function App() {
-
+const App = () => {
   return (
-    <>
-     <h1>We are building an appointment booking system</h1>
-     <h3>Coming Soon...</h3>
-    </>
+    <div className="min-h-screen flex items-center justify-center bg-slate-900">
+      <h1 className="text-4xl font-bold text-white" >
+        Tailwind is working 🚀
+      </h1>
+    </div>
   )
 }
 
-export default App 
- 
+export default App

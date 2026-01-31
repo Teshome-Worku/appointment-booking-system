@@ -8,8 +8,8 @@ const Navbar = () => {
           </h1>
   
           {/* Menu */}
-          <ul className="flex items-center gap-6 text-gray-600">
-            <li className="hover:text-blue-600 cursor-pointer transition">
+          <ul className="flex items-center gap-6 text-gray-600 " >
+            <li className="text-blue-600 hover:text-blue-600 cursor-pointer transition">
               Home
             </li>
             <li className="hover:text-blue-600 cursor-pointer transition">

@@ -23,11 +23,15 @@ const BookingForm = ({ service }) => {
       time,
     })
     setShowSuccessModal(true)
-    const timer = setTimeout(() => {
-      setShowSuccessModal(false)
-      navigate("/my-bookings")
-    }, 2000);
-    return () => clearTimeout(timer);
+    // const timer = setTimeout(() => {
+    //   setShowSuccessModal(false)
+    //   navigate("/my-bookings")
+    // }, 2000);
+    // return () => clearTimeout(timer);
+  }
+  const handleClose = () => {
+    setShowSuccessModal(false)
+    navigate("/my-bookings")
   }
 
   return (
@@ -73,7 +77,7 @@ const BookingForm = ({ service }) => {
     {showSuccessModal && (
       <SuccessModal
         isOpen={showSuccessModal}
-        onClose={() => setShowSuccessModal(false)}
+        onClose={handleClose}
         message="Booking confirmed successfully!"
       />
     )}

@@ -1,8 +1,12 @@
 import { useContext } from "react"
 import { BookingContext } from "../context/BookingContext"
+import { openDB } from "../db/indexedDB"
 
 const MyBookings = () => {
   const { bookings } = useContext(BookingContext)
+  openDB().then(() => {
+    console.log("Database is ready")
+  })
 
   if (bookings.length === 0) {
     return (

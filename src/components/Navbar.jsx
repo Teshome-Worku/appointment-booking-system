@@ -1,3 +1,4 @@
+import { NavLink } from "react-router-dom"
 const Navbar = () => {
     return (
       <nav className="w-full bg-white shadow-sm">
@@ -9,15 +10,26 @@ const Navbar = () => {
   
           {/* Menu */}
           <ul className="flex items-center gap-6 text-gray-600 " >
-            <li className="text-blue-600 hover:text-blue-600 cursor-pointer transition">
+        
+            <NavLink to="/" className={({ isActive }) => 
+              isActive 
+              ? "text-blue-600 font-medium border-b-2 border-blue-600" 
+              : "hover:text-blue-600 cursor-pointer transition"}>
               Home
-            </li>
-            <li className="hover:text-blue-600 cursor-pointer transition">
+            </NavLink>
+
+            <NavLink to="/book" className={({ isActive }) => isActive 
+            ? "text-blue-600 font-medium border-b-2 border-blue-600" 
+            : "hover:text-blue-600 cursor-pointer transition"}>
               Book
-            </li>
-            <li className="hover:text-blue-600 cursor-pointer transition">
+            </NavLink>
+
+            <NavLink to="/my-bookings" className={({ isActive }) => isActive 
+            ? "text-blue-600 font-medium border-b-2 border-blue-600" 
+            : "hover:text-blue-600 cursor-pointer transition"}>
               My Bookings
-            </li>
+            </NavLink>
+          
           </ul>
         </div>
       </nav>

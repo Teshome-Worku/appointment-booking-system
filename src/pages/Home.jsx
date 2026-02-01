@@ -4,6 +4,11 @@ import services from "../data/services"
 const Home = () => {
   return (
     <div className="max-w-7xl mx-auto px-6 py-10">
+       <div className="p-8">
+        <h2 className="text-2xl font-semibold ">
+          Welcome to the Booking System
+        </h2>
+      </div>
       <h2 className="  text-3xl font-bold mb-8 ">
         Choose a Service
       </h2>
@@ -16,5 +21,4 @@ const Home = () => {
     </div>
   )
 }
-
 export default Home

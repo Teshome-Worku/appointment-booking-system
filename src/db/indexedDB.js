@@ -26,7 +26,6 @@ export const openDB = () => {
     // Function to add a booking to the IndexedDB
 export const addBookingToDB = async(booking) => {
         const db = await openDB()
-
         return new Promise((resolve, reject) => {
             const transaction = db.transaction("bookings", "readwrite")
             const store = transaction.objectStore("bookings")

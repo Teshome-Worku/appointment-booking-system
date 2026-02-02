@@ -1,10 +1,19 @@
-import { useContext } from "react"
+import { useContext,useEffect } from "react"
 import { BookingContext } from "../context/BookingContext"
 
 const MyBookings = () => {
-  const { bookings } = useContext(BookingContext)
+  const { bookings } = useContext(BookingContext);
+  const { fetchBookings } = useContext(BookingContext);
+  const { deleteBooking } = useContext(BookingContext);
 
+  // Fetch bookings when component mounts
+  useEffect(() => {
+    fetchBookings();
+  }, []);
+  const handleDelete=(id)=>{
+    deleteBooking(id);
 
+  }
   if (bookings.length === 0) {
     return (
       <p className="text-center mt-10 text-gray-500">
@@ -31,7 +40,10 @@ const MyBookings = () => {
               <p className="text-sm text-gray-600">
                 {booking.date} at {booking.time}
               </p>
-              <span className="text-xs text-gray-500"> id:{booking.id}</span>
+              <button className=" bg-red-500 text-white hover:bg-red-700 px-4 py-2 rounded mt-2" 
+              onClick={()=>{handleDelete(booking.id)
+              }}>Delete</button>
+           
             </div>
           </div>
         ))}

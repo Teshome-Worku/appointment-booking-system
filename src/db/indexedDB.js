@@ -52,15 +52,35 @@ export const getAllBookingsFromDB = async() => {
     }
     // Function to clear all bookings from the IndexedDB
 export const deleteBookingFromDB = async(id) => {
-    const db = await openDB()
+        const db = await openDB()
+
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction("bookings", "readwrite")
+            const store = transaction.objectStore("bookings")
+
+            const request = store.delete(id)
+
+            request.onsuccess = () => resolve()
+            request.onerror = () => reject("Failed to delete booking")
+        })
+    }
+    //Function to update a specific booking i the indexedDB
+export const updateBookingInDB = async(updatedBooking) => {
+    const request = await openDB();
 
     return new Promise((resolve, reject) => {
-        const transaction = db.transaction("bookings", "readwrite")
-        const store = transaction.objectStore("bookings")
 
-        const request = store.delete(id)
+        request.onsuccess = () => {
+            const db = request.result
+            const transaction = db.transaction("bookings", "readwrite")
+            const store = transaction.objectStore("bookings")
 
-        request.onsuccess = () => resolve()
-        request.onerror = () => reject("Failed to delete booking")
+            const updateRequest = store.put(updatedBooking)
+
+            updateRequest.onsuccess = () => resolve()
+            updateRequest.onerror = () => reject("Update failed")
+        }
+
+        request.onerror = () => reject("DB open failed")
     })
 }

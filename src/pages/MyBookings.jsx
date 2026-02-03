@@ -1,8 +1,11 @@
-import { useContext,useEffect } from "react"
+import { useContext,useEffect,useState } from "react"
 import { BookingContext } from "../context/BookingContext"
+import DeleteConfirm from "../modals/deleteConfirm";
 
 const MyBookings = () => {
   const { bookings,fetchBookings,deleteBooking } = useContext(BookingContext);
+  const [showDeleteConfirm,setShowDeleteConfirm]=useState(false);
+  const [bookingToDelete,setBookingToDelete]=useState(null);
 
   // Fetch bookings when component mounts
   useEffect(() => {
@@ -15,6 +18,20 @@ const MyBookings = () => {
         No bookings yet.
       </p>
     )
+  }
+
+  const handleDelete=(id)=>{
+    setBookingToDelete(id);
+    setShowDeleteConfirm(true);
+  }
+  const onClose=()=>{
+    setShowDeleteConfirm(false);
+    setBookingToDelete(null);
+  }
+  const handleConfirmDelete=async()=>{
+    await deleteBooking(bookingToDelete);
+    setShowDeleteConfirm(false);
+    setBookingToDelete(null);
   }
   return (
     <div className="max-w-4xl mx-auto px-6 py-10">
@@ -36,13 +53,16 @@ const MyBookings = () => {
                 {booking.date} at {booking.time}
               </p>
               <button className=" bg-red-500 text-white hover:bg-red-700 px-4 py-2 rounded mt-2" 
-              onClick={()=>{deleteBooking(booking.id)
-              }}>Delete</button>
+              onClick={() => handleDelete(booking.id)}>Delete</button>
            
             </div>
           </div>
         ))}
       </div>
+      {showDeleteConfirm && (
+        <DeleteConfirm 
+        onConfirm={handleConfirmDelete} 
+        onClose={onClose}/>)}
     </div>
   )
 }

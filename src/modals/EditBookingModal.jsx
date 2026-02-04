@@ -1,5 +1,4 @@
 import { useContext, useState, useEffect, use } from "react"
-import {  useNavigate } from "react-router-dom"
 import { BookingContext } from "../context/BookingContext"
 
 const EditBookingModal = ({onClose}) => {
@@ -8,7 +7,6 @@ const EditBookingModal = ({onClose}) => {
     setEditingBooking,
     updateBooking
   } = useContext(BookingContext)
-  const navigate=useNavigate();
   const [date, setDate] = useState("")
   const [time, setTime] = useState("")
 
@@ -29,6 +27,11 @@ const EditBookingModal = ({onClose}) => {
       time,
     })
     onClose();
+    console.log("saved",{
+        ...editingBooking,
+        date,
+        time,
+    });
   }
 
   return (

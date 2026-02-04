@@ -7,7 +7,7 @@ const BookingForm = ({ service }) => {
   const [date, setDate] = useState("")
   const [time, setTime] = useState("")
 
-  const { addBooking } = useContext(BookingContext)
+  const { addBooking} = useContext(BookingContext)
   const navigate = useNavigate()
   const [showSuccessModal, setShowSuccessModal] = useState(false)
 
@@ -23,17 +23,12 @@ const BookingForm = ({ service }) => {
       time,
     })
     setShowSuccessModal(true)
-    // const timer = setTimeout(() => {
-    //   setShowSuccessModal(false)
-    //   navigate("/my-bookings")
-    // }, 2000);
-    // return () => clearTimeout(timer);
+    
   }
   const handleClose = () => {
     setShowSuccessModal(false)
     navigate("/my-bookings")
   }
-
   return (
     <>
     <form
@@ -85,5 +80,4 @@ const BookingForm = ({ service }) => {
 
   );
 }
-
 export default BookingForm

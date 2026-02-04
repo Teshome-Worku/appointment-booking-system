@@ -55,7 +55,6 @@ export const BookingProvider = ({ children }) => {
       console.error("Error updating booking:", error)
     }
   }
-  
 
   return (
     <BookingContext.Provider

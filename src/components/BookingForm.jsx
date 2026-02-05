@@ -6,78 +6,159 @@ import SuccessModal from "../modals/successModal"
 const BookingForm = ({ service }) => {
   const [date, setDate] = useState("")
   const [time, setTime] = useState("")
+  const [errors, setErrors] = useState({})
 
-  const { addBooking} = useContext(BookingContext)
+  const { addBooking } = useContext(BookingContext)
   const navigate = useNavigate()
   const [showSuccessModal, setShowSuccessModal] = useState(false)
 
-  const handleSubmit = (e) => {
+  // Get minimum date (today)
+  const getMinDate = () => {
+    const today = new Date()
+    return today.toISOString().split("T")[0]
+  }
+
+  const validateForm = () => {
+    const newErrors = {}
+    
+    if (!date) {
+      newErrors.date = "Please select a date"
+    } else {
+      const selectedDate = new Date(date)
+      const today = new Date()
+      today.setHours(0, 0, 0, 0)
+      
+      if (selectedDate < today) {
+        newErrors.date = "Please select a future date"
+      }
+    }
+
+    if (!time) {
+      newErrors.time = "Please select a time"
+    }
+
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
+  }
+
+  const handleSubmit = async (e) => {
     e.preventDefault()
 
-    if (!date || !time) return
+    if (!validateForm()) return
 
-    addBooking({
+    const booking = {
       id: Date.now(),
       service: service.name,
       date,
       time,
-    })
+      duration: service.duration,
+      status: "confirmed"
+    }
+
+    await addBooking(booking)
     setShowSuccessModal(true)
-    
   }
+
   const handleClose = () => {
     setShowSuccessModal(false)
     navigate("/my-bookings")
   }
+
   return (
     <>
-    <form
-      onSubmit={handleSubmit}
-      className="max-w-md mx-auto bg-white p-6 rounded-xl shadow-md"
-    >
-      <h2 className="text-2xl font-bold mb-6">
-        Book {service.name}
-      </h2>
-      {/* Date */}
-      <div className="mb-4">
-        <label className="block text-sm font-medium mb-1">
-          Date
-        </label>
-        <input
-          type="date"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-          className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500"
-        />
+      <div className="max-w-2xl mx-auto px-6 py-12">
+        <div className="card p-8 md:p-10">
+          {/* Header */}
+          <div className="mb-8">
+            <div className="flex items-center gap-4 mb-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-lg flex items-center justify-center text-2xl">
+                📅
+              </div>
+              <div>
+                <h2 className="text-3xl font-bold text-gray-800">
+                  Book {service.name}
+                </h2>
+                <p className="text-gray-600 mt-1">
+                  Duration: {service.duration} minutes
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Date Field */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Select Date <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="date"
+                value={date}
+                min={getMinDate()}
+                onChange={(e) => {
+                  setDate(e.target.value)
+                  if (errors.date) setErrors({ ...errors, date: "" })
+                }}
+                className={`input-field ${errors.date ? "border-red-500 focus:ring-red-500" : ""}`}
+              />
+              {errors.date && (
+                <p className="text-red-500 text-sm mt-1">{errors.date}</p>
+              )}
+            </div>
+
+            {/* Time Field */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Select Time <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="time"
+                value={time}
+                onChange={(e) => {
+                  setTime(e.target.value)
+                  if (errors.time) setErrors({ ...errors, time: "" })
+                }}
+                className={`input-field ${errors.time ? "border-red-500 focus:ring-red-500" : ""}`}
+              />
+              {errors.time && (
+                <p className="text-red-500 text-sm mt-1">{errors.time}</p>
+              )}
+            </div>
+
+            {/* Summary */}
+            {date && time && (
+              <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-4">
+                <h3 className="font-semibold text-gray-800 mb-2">Booking Summary</h3>
+                <div className="space-y-1 text-sm text-gray-700">
+                  <p><span className="font-medium">Service:</span> {service.name}</p>
+                  <p><span className="font-medium">Date:</span> {new Date(date).toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}</p>
+                  <p><span className="font-medium">Time:</span> {new Date(`2000-01-01T${time}`).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}</p>
+                  <p><span className="font-medium">Duration:</span> {service.duration} minutes</p>
+                </div>
+              </div>
+            )}
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              className="w-full btn-primary text-lg py-4"
+            >
+              Confirm Booking
+            </button>
+          </form>
+        </div>
       </div>
 
-      {/* Time */}
-      <div className="mb-6">
-        <label className="block text-sm font-medium mb-1">
-          Time
-        </label>
-        <input
-          type="time"
-          value={time}
-          onChange={(e) => setTime(e.target.value)}
-          className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500"
+      {showSuccessModal && (
+        <SuccessModal
+          isOpen={showSuccessModal}
+          onClose={handleClose}
+          message="Booking confirmed successfully!"
         />
-      </div>
-
-      <button className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
-        Confirm Booking
-      </button>
-    </form>
-
-    {showSuccessModal && (
-      <SuccessModal
-        isOpen={showSuccessModal}
-        onClose={handleClose}
-        message="Booking confirmed successfully!"
-      />
-    )}
+      )}
     </>
-
-  );
+  )
 }
+
 export default BookingForm

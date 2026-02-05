@@ -1,14 +1,12 @@
-import { useContext, useState, useEffect, use } from "react"
+import { useContext, useState, useEffect } from "react"
 import { BookingContext } from "../context/BookingContext"
 
-const EditBookingModal = ({onClose}) => {
-  const {
-    editingBooking,
-    setEditingBooking,
-    updateBooking
-  } = useContext(BookingContext)
+const EditBookingModal = ({ onClose }) => {
+  const { editingBooking, setEditingBooking, updateBooking } =
+    useContext(BookingContext)
   const [date, setDate] = useState("")
   const [time, setTime] = useState("")
+  const [errors, setErrors] = useState({})
 
   // Prefill when modal opens
   useEffect(() => {
@@ -20,55 +18,117 @@ const EditBookingModal = ({onClose}) => {
 
   if (!editingBooking) return null
 
-  const handleSave = () => {
-    updateBooking({
+  const getMinDate = () => {
+    const today = new Date()
+    return today.toISOString().split("T")[0]
+  }
+
+  const validateForm = () => {
+    const newErrors = {}
+
+    if (!date) {
+      newErrors.date = "Please select a date"
+    } else {
+      const selectedDate = new Date(date)
+      const today = new Date()
+      today.setHours(0, 0, 0, 0)
+
+      if (selectedDate < today) {
+        newErrors.date = "Please select a future date"
+      }
+    }
+
+    if (!time) {
+      newErrors.time = "Please select a time"
+    }
+
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
+  }
+
+  const handleSave = async () => {
+    if (!validateForm()) return
+
+    await updateBooking({
       ...editingBooking,
       date,
       time,
     })
-    onClose();
-    console.log("saved",{
-        ...editingBooking,
-        date,
-        time,
-    });
+    onClose()
   }
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center">
-      <div className="bg-white p-6 rounded-lg w-96">
-        <h2 className="text-xl font-bold mb-4">
-          Edit Booking
-        </h2>
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
+      <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 transform scale-100 animate-scale-in">
+        <div className="p-8">
+          {/* Header */}
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-lg flex items-center justify-center text-2xl">
+              ✏️
+            </div>
+            <h2 className="text-2xl font-bold text-gray-800">Edit Booking</h2>
+          </div>
 
-        <input
-          type="date"
-          value={date}
-          onChange={e => setDate(e.target.value)}
-          className="w-full border p-2 rounded mb-3"
-        />
+          {/* Form */}
+          <div className="space-y-4">
+            {/* Date Field */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Select Date <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="date"
+                value={date}
+                min={getMinDate()}
+                onChange={(e) => {
+                  setDate(e.target.value)
+                  if (errors.date) setErrors({ ...errors, date: "" })
+                }}
+                className={`input-field ${errors.date ? "border-red-500 focus:ring-red-500" : ""}`}
+              />
+              {errors.date && (
+                <p className="text-red-500 text-sm mt-1">{errors.date}</p>
+              )}
+            </div>
 
-        <input
-          type="time"
-          value={time}
-          onChange={e => setTime(e.target.value)}
-          className="w-full border p-2 rounded mb-4"
-        />
+            {/* Time Field */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Select Time <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="time"
+                value={time}
+                onChange={(e) => {
+                  setTime(e.target.value)
+                  if (errors.time) setErrors({ ...errors, time: "" })
+                }}
+                className={`input-field ${errors.time ? "border-red-500 focus:ring-red-500" : ""}`}
+              />
+              {errors.time && (
+                <p className="text-red-500 text-sm mt-1">{errors.time}</p>
+              )}
+            </div>
+          </div>
 
-        <div className="flex justify-end gap-2">
-          <button
-            className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400 transition duration-200"
-            onClick={()=>{setEditingBooking(null); onClose();}}
-          >
-            Cancel
-          </button>
-
-          <button
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition duration-200"
-            onClick={handleSave}
-          >
-            Save
-          </button>
+          {/* Buttons */}
+          <div className="flex gap-3 mt-8">
+            <button
+              className="flex-1 btn-secondary py-3"
+              onClick={() => {
+                setEditingBooking(null)
+                onClose()
+              }}
+            >
+              Cancel
+            </button>
+            <button
+              className="flex-1 btn-primary py-3"
+              onClick={handleSave}
+            >
+              Save Changes
+            </button>
+          </div>
         </div>
       </div>
     </div>

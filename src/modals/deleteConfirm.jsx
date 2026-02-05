@@ -1,10 +1,10 @@
 const DeleteConfirm = ({ onConfirm, onClose }) => {
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm z-50">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 transform scale-100 animate-scale-in">
-        <div className="p-8">
+    <div className="fixed inset-0 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm z-50 p-0 sm:p-4">
+      <div className="bg-white rounded-t-2xl sm:rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto animate-scale-in">
+        <div className="p-6 sm:p-8">
           {/* Warning Icon */}
-          <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
+          <div className="w-16 h-16 sm:w-20 sm:h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
             <svg
               className="w-12 h-12 text-red-600"
               fill="none"
@@ -21,24 +21,24 @@ const DeleteConfirm = ({ onConfirm, onClose }) => {
           </div>
 
           {/* Content */}
-          <h2 className="text-2xl font-bold text-gray-800 mb-3 text-center">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-2 sm:mb-3 text-center">
             Confirm Deletion
           </h2>
-          <p className="text-gray-600 mb-8 text-center">
+          <p className="text-gray-600 mb-6 sm:mb-8 text-center text-sm sm:text-base">
             Are you sure you want to delete this booking? This action cannot be undone.
           </p>
 
           {/* Buttons */}
-          <div className="flex gap-3">
+          <div className="flex flex-col-reverse sm:flex-row gap-3">
             <button
               onClick={onClose}
-              className="flex-1 btn-secondary py-3"
+              className="flex-1 btn-secondary py-3 min-h-[48px] sm:min-h-[44px]"
             >
               Cancel
             </button>
             <button
               onClick={onConfirm}
-              className="flex-1 bg-gradient-to-r from-red-600 to-red-700 text-white px-6 py-3 rounded-lg font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200"
+              className="flex-1 bg-gradient-to-r from-red-600 to-red-700 text-white px-6 py-3 rounded-lg font-semibold shadow-lg hover:shadow-xl active:scale-[0.98] transition-all duration-200 min-h-[48px] sm:min-h-[44px] flex items-center justify-center"
             >
               Delete
             </button>

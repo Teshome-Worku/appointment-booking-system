@@ -58,9 +58,9 @@ const EditBookingModal = ({ onClose }) => {
   }
 
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 transform scale-100 animate-scale-in">
-        <div className="p-8">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-end sm:items-center justify-center z-50 p-0 sm:p-4 overflow-y-auto">
+      <div className="bg-white rounded-t-2xl sm:rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto animate-scale-in my-auto sm:my-0">
+        <div className="p-5 sm:p-8">
           {/* Header */}
           <div className="flex items-center gap-3 mb-6">
             <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-lg flex items-center justify-center text-2xl">
@@ -112,9 +112,9 @@ const EditBookingModal = ({ onClose }) => {
           </div>
 
           {/* Buttons */}
-          <div className="flex gap-3 mt-8">
+          <div className="flex flex-col-reverse sm:flex-row gap-3 mt-6 sm:mt-8">
             <button
-              className="flex-1 btn-secondary py-3"
+              className="flex-1 btn-secondary py-3 min-h-[48px] sm:min-h-[44px]"
               onClick={() => {
                 setEditingBooking(null)
                 onClose()
@@ -123,7 +123,7 @@ const EditBookingModal = ({ onClose }) => {
               Cancel
             </button>
             <button
-              className="flex-1 btn-primary py-3"
+              className="flex-1 btn-primary py-3 min-h-[48px] sm:min-h-[44px]"
               onClick={handleSave}
             >
               Save Changes

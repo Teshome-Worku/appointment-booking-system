@@ -79,7 +79,7 @@ const BookingForm = ({ service }) => {
           {/* Back link */}
           <Link
             to="/"
-            className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium mb-6 text-sm sm:text-base min-h-[44px] items-center"
+            className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium mb-6 text-sm sm:text-base min-h-[44px] "
           >
             <span aria-hidden>←</span> Change service
           </Link>
